@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>List of hogwarts students</h1>
+    <p>
+        Filter:
+        <button class="filter" data-action="filter" data-filter="Gryffindor">Gryffindor</button>
+        <button class="filter" data-action="filter" data-filter="Ravenclaw">Ravenclaw</button>
+        <button class="filter" data-action="filter" data-filter="Hufflepuff">Hufflepuff</button>
+        <button class="filter" data-action="filter" data-filter="Slytherin">Slytherin</button>
+        <button class="filter" data-action="filter" data-filter="*">all</button>
+      </p>
+  
+
+        <section id="list">
+            
+        </section>
+    
+    
+        <template id="studentTemplate">
+            <article id="student">
+            <h3 data-field="fullname"></h3>
+            <img src="" alt="" class="image">
+
+            <p data-field="firstname"></p>
+            <p data-field="middlename"></p>
+            <p data-field="nickname"></p>
+            <p data-field="lastname"></p>
+            <p data-field="gender"></p>
+            <p data-field="house"></p>
+        </article>
+        </template>
+        <script src="script.js"></script>
+
+</body>
+</html>
