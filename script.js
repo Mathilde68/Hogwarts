@@ -27,9 +27,16 @@ function start() {
     loadJSON();
 }
 
-function registerButtons(){
+function registerButtons() {
     document.querySelectorAll("[data-action='filter']")
-    .forEach(button => button.addEventListener("click", selectFilter));
+        .forEach(button => button.addEventListener("click", selectFilter));
+
+
+    document.querySelectorAll("[data-action='sort']")
+        .forEach(button => button.addEventListener("click", selectSort));
+
+    
+
 }
 
 
@@ -145,24 +152,24 @@ function prepareObjects(jsonData) {
 
 }
 
-function selectFilter(event){
-const filter = event.target.dataset.filter;
-console.log( `user selected: ${filter}`);
-filterList(filter);
+function selectFilter(event) {
+    const filter = event.target.dataset.filter;
+    console.log(`user selected: ${filter}`);
+    filterList(filter);
 }
 
 function filterList(filterBy) {
     let filteredList = allStudents;
 
-    if (filterBy === "Hufflepuff"){
-      filteredList= allStudents.filter(isHufflepuff);
-    }else if(filterBy === "Gryffindor"){
-      filteredList= allStudents.filter(isGryffindor);
-    }else if(filterBy === "Ravenclaw"){
-        filteredList= allStudents.filter(isRavenclaw);
-      }else if(filterBy === "Slytherin"){
-        filteredList= allStudents.filter(isSlytherin);
-      }
+    if (filterBy === "Hufflepuff") {
+        filteredList = allStudents.filter(isHufflepuff);
+    } else if (filterBy === "Gryffindor") {
+        filteredList = allStudents.filter(isGryffindor);
+    } else if (filterBy === "Ravenclaw") {
+        filteredList = allStudents.filter(isRavenclaw);
+    } else if (filterBy === "Slytherin") {
+        filteredList = allStudents.filter(isSlytherin);
+    }
 
     function isHufflepuff(student) {
         return student.house === "Hufflepuff";
@@ -178,23 +185,80 @@ function filterList(filterBy) {
 
     function isSlytherin(student) {
         return student.house === "Slytherin";
-     
+
     }
 
     displayList(filteredList);
 }
+
+function selectSort(event){
+    const sort = event.target.dataset.sort;
+    console.log(`user selected: ${sort}`);
+    sortList(sort);
+}
+
+function sortList(sortBy) {
+    const list = allStudents;
+    let sortedList;
+
+    if (sortBy === "firstname") {
+        sortedList = list.sort(sortByFirstname);
+    } else if (sortBy === "lastname") {
+        sortedList = list.sort(sortByLastname);
+    } else if (sortBy === "house") {
+        sortedList = list.sort(sortByHouse);
+    } 
+
+
+    function sortByFirstname(studentA, studentB) {
+        if (studentA.firstname < studentB.firstname) {
+            return -1;
+        } else {
+            return 1;
+        }
+    }
+
+    function sortByLastname(studentA, studentB) {
+        if (studentA.lastname < studentB.lastname) {
+            return -1;
+        } else {
+            return 1;
+        }
+    }
+
+    function sortByHouse(studentA, studentB) {
+        if (studentA.house < studentB.house) {
+            return -1;
+        } else {
+            return 1;
+        }
+    }
+
+
+    
+    displayList(sortedList);
+}
+
+ function addStyles(studenthouse,dest){
+    dest.classList.add(studenthouse);
+} 
+
 function displayList(students) {
     // clear the list
     document.querySelector("#list").innerHTML = "";
 
     // build a new list
     students.forEach(displayStudent);
+    
+    
+
 }
 
 
 function displayStudent(student) {
     // create clone
     const clone = document.querySelector("template#studentTemplate").content.cloneNode(true);
+    const article = clone.querySelector("#student");
 
     // set clone data
     clone.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
@@ -203,7 +267,6 @@ function displayStudent(student) {
     clone.querySelector("[data-field=lastname]").textContent = "lastname: " + student.lastname;
     clone.querySelector("[data-field=nickname]").textContent = "nickname: " + student.nickname;
     clone.querySelector(".image").src = student.image;
-
     // for students that have no middlename,nickname or lastname, sets those fields to null and sets correct fullnames 
     if (!student.middlename) {
         clone.querySelector("[data-field=middlename]").textContent = null;
@@ -222,12 +285,13 @@ function displayStudent(student) {
     clone.querySelector("[data-field=gender]").textContent = "gender: " + student.gender;
     clone.querySelector("[data-field=house]").textContent = "house: " + student.house;
 
+//calls adds style, to article and according to studnet house
+    addStyles(student.house,article);
 
-
-
-
-
+  
 
     // append clone to list
     document.querySelector("#list").appendChild(clone);
+
+   
 }

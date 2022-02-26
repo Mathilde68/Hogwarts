@@ -1,10 +1,62 @@
+body{
+
+    margin: 0;
+     background-image: url(images/hogwartsletter.jpg);
+    background-size:cover;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-attachment:fixed; 
+}
+ 
+
+h1{
+color:rgb(233, 214, 162);
+}
+#sorting p, #filtering p{
+color:rgb(235, 216, 174);
+
+}
 #student{
 margin-bottom: 50px;
-border: 2px solid black;
+padding: 1rem;
+border-radius: 25px;
+
+
 }
 
+.Gryffindor{
+background-color:rgb(175, 55, 55);
+border: 5px solid rgb(214, 157, 34);
+}
+
+.Ravenclaw{
+background-color:rgb(46, 61, 129);
+    border: 5px solid rgb(166, 186, 204);
+  
+
+}
+
+.Hufflepuff{
+background-color:rgb(231, 202, 72);
+border: 5px solid rgb(36, 36, 36);
+
+
+
+}
+.Slytherin{
+    background-color:rgb(33, 110, 65);
+    border: 5px solid rgb(163, 187, 201);
+}
+
+    
+
+
+
 #list{
+    max-width: 1400px;
+    margin: 0 auto;
     display: grid;
     grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
     grid-gap: 20px;
 }
+
