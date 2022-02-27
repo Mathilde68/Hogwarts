@@ -139,7 +139,7 @@ function prepareObjects(jsonData) {
         student.house = house;
         if (lastName) {
             student.image = getImage(firstName, lastName);
-        } else student.image = null;
+        } else student.image = "images/null.png";
 
         //add the object to the global allAnimals array
         allStudents.push(student);
@@ -240,6 +240,7 @@ function sortList(sortBy) {
 }
 
 function addStyles(studenthouse, dest) {
+    dest.className ="";
     dest.classList.add(studenthouse);
 }
 
@@ -291,17 +292,25 @@ function displayStudent(student) {
 
 function showDetails(student) {
     let popup = document.querySelector("#popup");
+    const detailArticle = popup.querySelector("#studentDetail");
+
+  
+   resetDisplay();
+
+
 
     //set display style to block to make visible
     popup.style.display = "block";
 
     //shows fullname, firstname, lastnames, nicknames and middle names.
     popup.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
-    popup.querySelector("[data-field=firstname]").textContent = "firstname: " + student.firstname;
-    popup.querySelector("[data-field=middlename]").textContent = "middlename: " + student.middlename;
+    popup.querySelector("[data-field=firstname]").textContent = `Firstname: ${student.firstname}`;
+    popup.querySelector("[data-field=middlename]").textContent = `Middlename: ${student.middlename}`;
     popup.querySelector("[data-field=lastname]").textContent = "lastname: " + student.lastname;
     popup.querySelector("[data-field=nickname]").textContent = "nickname: " + student.nickname;
-    // for students that have no middlename,nickname or lastname, sets those fields to none display and sets correct fullnames 
+    // if statements for students that have no middlename,nickname or lastname
+    //sets those fields to none display as to not leave empty spaces
+    // also sets correct fullnames 
     if (!student.middlename) {
         popup.querySelector("[data-field=middlename]").style.display ="none";
         popup.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.lastname}`;
@@ -318,8 +327,18 @@ function showDetails(student) {
 
     popup.querySelector("[data-field=gender]").textContent = "gender: " + student.gender;
     popup.querySelector("[data-field=house]").textContent = "house: " + student.house;
+//add styles to the article according to student house
+    addStyles(student.house, detailArticle);
 
+
+    //adds click eventlistener to the close button (this is an anonymous closured function)
     document.querySelector("#luk").addEventListener("click", () => popup.style.display = "none");
+
+    function resetDisplay(){
+        popup.querySelector("[data-field=middlename]").style.display ="block";
+        popup.querySelector("[data-field=lastname]").style.display ="block";
+        popup.querySelector("[data-field=nickname]").style.display ="block";
+    }
 
 
 }

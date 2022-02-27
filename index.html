@@ -11,50 +11,57 @@
 
 <body>
     <main>
-    <h1>List of hogwarts students</h1>
-    <div id="filtering">
-        <p>
-            Filter:
-            <button class="filter" data-action="filter" data-filter="Gryffindor">Gryffindor</button>
-            <button class="filter" data-action="filter" data-filter="Ravenclaw">Ravenclaw</button>
-            <button class="filter" data-action="filter" data-filter="Hufflepuff">Hufflepuff</button>
-            <button class="filter" data-action="filter" data-filter="Slytherin">Slytherin</button>
-            <button class="filter" data-action="filter" data-filter="*">all</button>
-        </p>
-    </div>
+        <h1>List of hogwarts students</h1>
+        <div id="filtering">
+            <p>
+                Filter:
+                <button class="filter" data-action="filter" data-filter="Gryffindor">Gryffindor</button>
+                <button class="filter" data-action="filter" data-filter="Ravenclaw">Ravenclaw</button>
+                <button class="filter" data-action="filter" data-filter="Hufflepuff">Hufflepuff</button>
+                <button class="filter" data-action="filter" data-filter="Slytherin">Slytherin</button>
+                <button class="filter" data-action="filter" data-filter="*">all</button>
+            </p>
+        </div>
 
-    <div id="sorting">
-        <p>
-            Sort by:
-            <button data-action="sort" data-sort-direction="asc" data-sort="firstname">Firstname (a-z)</button>
-            <button data-action="sort" data-sort-direction="asc" data-sort="lastname">Lastname (a-z)</button>
-            <button data-action="sort" data-sort-direction="asc" data-sort="house">House (a-z)</button>
-        </p>
-    </div>
-  
-
-
-    <section id="list">
-
-    </section>
+        <div id="sorting">
+            <p>
+                Sort by:
+                <button data-action="sort" data-sort-direction="asc" data-sort="firstname">Firstname (a-z)</button>
+                <button data-action="sort" data-sort-direction="asc" data-sort="lastname">Lastname (a-z)</button>
+                <button data-action="sort" data-sort-direction="asc" data-sort="house">House (a-z)</button>
+            </p>
+        </div>
 
 
-    <section id="popup">
-        <div  id="luk"> &#9587; </div>
-        <article id="studentDetail">
-            <h3 data-field="fullname"></h3>
-            <img src="" alt="" class="image">
 
-            <p data-field="firstname"></p>
-            <p data-field="middlename"></p>
-            <p data-field="nickname"></p>
-            <p data-field="lastname"></p>
-            <p data-field="gender"></p>
-            <p data-field="house"></p>
-        </article>
-    </section>
+        <section id="list">
 
-</main>
+        </section>
+
+
+        <section id="popup">
+            <article id="studentDetail">
+                
+                <div class="col1">
+                <h2 data-field="fullname"></h2>
+                    <img src="" alt="" class="image">
+                </div>
+
+                <div class="col2">
+                    <p data-field="firstname"></p>
+                    <p data-field="middlename"></p>
+                    <p data-field="nickname"></p>
+                    <p data-field="lastname"></p>
+                    <p data-field="gender"></p>
+                    <p data-field="house"></p>
+                </div>
+                
+                <div id="luk"> &#9587; </div>
+            
+            </article>
+        </section>
+
+    </main>
 
     <template id="studentTemplate">
         <article class="" id="student">
