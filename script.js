@@ -35,7 +35,7 @@ function registerButtons() {
     document.querySelectorAll("[data-action='sort']")
         .forEach(button => button.addEventListener("click", selectSort));
 
-    
+
 
 }
 
@@ -191,7 +191,7 @@ function filterList(filterBy) {
     displayList(filteredList);
 }
 
-function selectSort(event){
+function selectSort(event) {
     const sort = event.target.dataset.sort;
     console.log(`user selected: ${sort}`);
     sortList(sort);
@@ -207,7 +207,7 @@ function sortList(sortBy) {
         sortedList = list.sort(sortByLastname);
     } else if (sortBy === "house") {
         sortedList = list.sort(sortByHouse);
-    } 
+    }
 
 
     function sortByFirstname(studentA, studentB) {
@@ -235,13 +235,13 @@ function sortList(sortBy) {
     }
 
 
-    
+
     displayList(sortedList);
 }
 
- function addStyles(studenthouse,dest){
+function addStyles(studenthouse, dest) {
     dest.classList.add(studenthouse);
-} 
+}
 
 function displayList(students) {
     // clear the list
@@ -249,8 +249,8 @@ function displayList(students) {
 
     // build a new list
     students.forEach(displayStudent);
-    
-    
+
+
 
 }
 
@@ -261,37 +261,66 @@ function displayStudent(student) {
     const article = clone.querySelector("#student");
 
     // set clone data
+
+    //fullname image and house.
     clone.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
-    clone.querySelector("[data-field=firstname]").textContent = "firstname: " + student.firstname;
-    clone.querySelector("[data-field=middlename]").textContent = "middlename: " + student.middlename;
-    clone.querySelector("[data-field=lastname]").textContent = "lastname: " + student.lastname;
-    clone.querySelector("[data-field=nickname]").textContent = "nickname: " + student.nickname;
     clone.querySelector(".image").src = student.image;
-    // for students that have no middlename,nickname or lastname, sets those fields to null and sets correct fullnames 
+
+    // for students that have no middlename, or lastname,sets correct fullnames 
     if (!student.middlename) {
-        clone.querySelector("[data-field=middlename]").textContent = null;
         clone.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.lastname}`;
     }
-    if (!student.nickname) {
-        clone.querySelector("[data-field=nickname]").textContent = null;
-
-    }
-
     if (!student.lastname) {
-        clone.querySelector("[data-field=lastname]").textContent = null;
         clone.querySelector("[data-field=fullname]").textContent = student.firstname;
     }
 
-    clone.querySelector("[data-field=gender]").textContent = "gender: " + student.gender;
-    clone.querySelector("[data-field=house]").textContent = "house: " + student.house;
+    clone.querySelector("[data-field=house]").textContent = student.house;
 
-//calls adds style, to article and according to studnet house
-    addStyles(student.house,article);
+    //calls adds style, to article and according to studnet house
+    addStyles(student.house, article);
+    //adds click eventlistener that calls the function showDetails for that student
+    article.addEventListener("click", () => showDetails(student));
 
-  
 
     // append clone to list
     document.querySelector("#list").appendChild(clone);
 
-   
+
 }
+
+
+function showDetails(student) {
+    let popup = document.querySelector("#popup");
+
+    //set display style to block to make visible
+    popup.style.display = "block";
+
+    //shows fullname, firstname, lastnames, nicknames and middle names.
+    popup.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
+    popup.querySelector("[data-field=firstname]").textContent = "firstname: " + student.firstname;
+    popup.querySelector("[data-field=middlename]").textContent = "middlename: " + student.middlename;
+    popup.querySelector("[data-field=lastname]").textContent = "lastname: " + student.lastname;
+    popup.querySelector("[data-field=nickname]").textContent = "nickname: " + student.nickname;
+    // for students that have no middlename,nickname or lastname, sets those fields to none display and sets correct fullnames 
+    if (!student.middlename) {
+        popup.querySelector("[data-field=middlename]").style.display ="none";
+        popup.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.lastname}`;
+    }
+    if (!student.nickname) {
+        popup.querySelector("[data-field=nickname]").style.display ="none";
+    }
+    if (!student.lastname) {
+        popup.querySelector("[data-field=lastname]").style.display ="none";
+        popup.querySelector("[data-field=fullname]").textContent = student.firstname;
+    }
+
+    popup.querySelector(".image").src = student.image;
+
+    popup.querySelector("[data-field=gender]").textContent = "gender: " + student.gender;
+    popup.querySelector("[data-field=house]").textContent = "house: " + student.house;
+
+    document.querySelector("#luk").addEventListener("click", () => popup.style.display = "none");
+
+
+}
+
