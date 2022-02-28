@@ -25,6 +25,7 @@ function start() {
 
     //load my json
     loadJSON();
+
 }
 
 function registerButtons() {
@@ -70,7 +71,7 @@ function prepareObjects(jsonData) {
         let middleName;
         let lastName;
         let nickName;
-        console.log(originalname);
+
 
         //if statement for students with 2 names
         if (originalname.length == 2) {
@@ -105,13 +106,13 @@ function prepareObjects(jsonData) {
         house = house.charAt(0).toUpperCase() + house.substring(1).toLowerCase();
 
         //just some console.logs for testing
-        console.log(fullName);
-        console.log("firstname:" + firstName);
-        console.log("middlename:" + middleName);
-        console.log("nickname:" + nickName);
-        console.log("lastname:" + lastName);
-        console.log(gender);
-        console.log(house);
+        /*   console.log(fullName);
+          console.log("firstname:" + firstName);
+          console.log("middlename:" + middleName);
+          console.log("nickname:" + nickName);
+          console.log("lastname:" + lastName);
+          console.log(gender);
+          console.log(house); */
 
         //get image closure function - uses first and lastname for the imagefilename.
         function getImage(firstName, lastName) {
@@ -147,7 +148,11 @@ function prepareObjects(jsonData) {
 
     });
 
+
+
     displayList(allStudents);
+    counter(allStudents);
+
 
 
 }
@@ -237,23 +242,24 @@ function sortList(sortBy) {
 
 
     displayList(sortedList);
+
 }
 
 function addStyles(studenthouse, dest) {
-    dest.className ="";
+    dest.className = "";
     dest.classList.add(studenthouse);
 }
 
 function displayList(students) {
+
+
     // clear the list
     document.querySelector("#list").innerHTML = "";
-
     // build a new list
     students.forEach(displayStudent);
 
-
-
 }
+
 
 
 function displayStudent(student) {
@@ -278,7 +284,7 @@ function displayStudent(student) {
     clone.querySelector("[data-field=house]").textContent = student.house;
 
     //calls adds style, to article and according to studnet house
-    addStyles(student.house, article);
+    //addStyles(student.house, article);
     //adds click eventlistener that calls the function showDetails for that student
     article.addEventListener("click", () => showDetails(student));
 
@@ -294,8 +300,8 @@ function showDetails(student) {
     let popup = document.querySelector("#popup");
     const detailArticle = popup.querySelector("#studentDetail");
 
-  
-   resetDisplay();
+
+    resetDisplay();
 
 
 
@@ -312,14 +318,14 @@ function showDetails(student) {
     //sets those fields to none display as to not leave empty spaces
     // also sets correct fullnames 
     if (!student.middlename) {
-        popup.querySelector("[data-field=middlename]").style.display ="none";
+        popup.querySelector("[data-field=middlename]").style.display = "none";
         popup.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.lastname}`;
     }
     if (!student.nickname) {
-        popup.querySelector("[data-field=nickname]").style.display ="none";
+        popup.querySelector("[data-field=nickname]").style.display = "none";
     }
     if (!student.lastname) {
-        popup.querySelector("[data-field=lastname]").style.display ="none";
+        popup.querySelector("[data-field=lastname]").style.display = "none";
         popup.querySelector("[data-field=fullname]").textContent = student.firstname;
     }
 
@@ -327,19 +333,78 @@ function showDetails(student) {
 
     popup.querySelector("[data-field=gender]").textContent = "gender: " + student.gender;
     popup.querySelector("[data-field=house]").textContent = "house: " + student.house;
-//add styles to the article according to student house
+    //add styles to the article according to student house
     addStyles(student.house, detailArticle);
+    popup.querySelector("#crest").src= `crest/${student.house}tempcrest.png`;
 
 
     //adds click eventlistener to the close button (this is an anonymous closured function)
     document.querySelector("#luk").addEventListener("click", () => popup.style.display = "none");
 
-    function resetDisplay(){
-        popup.querySelector("[data-field=middlename]").style.display ="block";
-        popup.querySelector("[data-field=lastname]").style.display ="block";
-        popup.querySelector("[data-field=nickname]").style.display ="block";
+    function resetDisplay() {
+        popup.querySelector("[data-field=middlename]").style.display = "block";
+        popup.querySelector("[data-field=lastname]").style.display = "block";
+        popup.querySelector("[data-field=nickname]").style.display = "block";
     }
 
 
 }
+
+function counter(student) {
+
+    //calls counter for students
+    displayCount(totalStudents(), hufflepuffStudent(),ravenclawStudent(),gryffindorStudent(),slytherinStudent());
+
+    function totalStudents() {
+        return student.length;
+    }
+
+    function hufflepuffStudent() {
+        let counter = 0;
+        for (let i = 0; i < student.length; i++) {
+            if (student[i].house === 'Hufflepuff') counter++;
+        }
+        console.log(counter);
+        return counter;
+    }
+    
+    function ravenclawStudent() {
+        let counter = 0;
+        for (let i = 0; i < student.length; i++) {
+            if (student[i].house === 'Ravenclaw') counter++;
+        }
+        console.log(counter);
+        return counter;
+    }
+
+    function gryffindorStudent() {
+        let counter = 0;
+        for (let i = 0; i < student.length; i++) {
+            if (student[i].house === 'Gryffindor') counter++;
+        }
+        console.log(counter);
+        return counter;
+    }
+
+    function slytherinStudent() {
+        let counter = 0;
+        for (let i = 0; i < student.length; i++) {
+            if (student[i].house === 'Slytherin') counter++;
+        }
+        console.log(counter);
+        return counter;
+    }
+
+}
+
+
+
+function displayCount(total, huff, raven, gryf, slyth, expelled) {
+    document.querySelector(".total").textContent += total;
+    document.querySelector(".hpStudents").textContent += huff;
+    document.querySelector(".rcStudents").textContent += raven;
+    document.querySelector(".gdStudents").textContent += gryf;
+    document.querySelector(".srStudents").textContent += slyth;
+}
+
 

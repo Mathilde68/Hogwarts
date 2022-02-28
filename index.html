@@ -11,7 +11,17 @@
 
 <body>
     <main>
+        <section id="section1">
         <h1>List of hogwarts students</h1>
+
+        <div>
+            <h3 class="total">Total students: </h3>
+            <h3 class="gdStudents">Gryffindor students: </h3>
+            <h3 class="rcStudents">Ravenclaw students: </h3>
+            <h3 class="hpStudents">Hufflepuff students:  </h3>
+            <h3 class="srStudents">Slytherin students: </h3>
+        </div>
+        
         <div id="filtering">
             <p>
                 Filter:
@@ -32,7 +42,7 @@
             </p>
         </div>
 
-
+    </section>
 
         <section id="list">
 
@@ -41,9 +51,12 @@
 
         <section id="popup">
             <article id="studentDetail">
-                
-                <div class="col1">
+                <div id="topflex">
                 <h2 data-field="fullname"></h2>
+                <div id="luk"> &#9587; </div>
+            </div>
+                <div id="bottomflex">
+                <div class="col1">
                     <img src="" alt="" class="image">
                 </div>
 
@@ -55,8 +68,11 @@
                     <p data-field="gender"></p>
                     <p data-field="house"></p>
                 </div>
-                
-                <div id="luk"> &#9587; </div>
+
+                <div class="col3">
+                    <img src="" alt="" id="crest">
+                </div>
+            </div>
             
             </article>
         </section>
@@ -64,16 +80,11 @@
     </main>
 
     <template id="studentTemplate">
-        <article class="" id="student">
+        <article class="default" id="student">
             <h3 data-field="fullname"></h3>
+            <p data-field="house"></p>
             <img src="" alt="" class="image">
 
-            <p data-field="firstname"></p>
-            <p data-field="middlename"></p>
-            <p data-field="nickname"></p>
-            <p data-field="lastname"></p>
-            <p data-field="gender"></p>
-            <p data-field="house"></p>
         </article>
     </template>
     <script src="script.js"></script>
