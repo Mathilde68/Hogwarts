@@ -198,47 +198,43 @@ function filterList(filterBy) {
 
 function selectSort(event) {
     const sort = event.target.dataset.sort;
-    console.log(`user selected: ${sort}`);
-    sortList(sort);
+    const sortDir = event.target.dataset.sortDirection;
+
+    //toggle sort direction 
+    if(sortDir === "az"){
+    event.target.dataset.sortDirection = "za";
+    }else{
+    event.target.dataset.sortDirection = "az";
+
+    }
+
+    console.log(`user selected: ${sort} - ${sortDir}`);
+    sortList(sort, sortDir);
 }
 
-function sortList(sortBy) {
+function sortList(sortBy, sortDir) {
     const list = allStudents;
     let sortedList;
-
-    if (sortBy === "firstname") {
-        sortedList = list.sort(sortByFirstname);
-    } else if (sortBy === "lastname") {
-        sortedList = list.sort(sortByLastname);
-    } else if (sortBy === "house") {
-        sortedList = list.sort(sortByHouse);
+    let direction = 1;
+    if (sortDir === "za") {
+        direction = -1;
+    } else {
+        direction = 1;
     }
 
 
-    function sortByFirstname(studentA, studentB) {
-        if (studentA.firstname < studentB.firstname) {
-            return -1;
+
+    sortedList = list.sort(sortByThis);
+
+
+
+    function sortByThis(studentA, studentB) {
+        if (studentA[sortBy] < studentB[sortBy]) {
+            return -1 * direction;
         } else {
-            return 1;
+            return 1 * direction;
         }
     }
-
-    function sortByLastname(studentA, studentB) {
-        if (studentA.lastname < studentB.lastname) {
-            return -1;
-        } else {
-            return 1;
-        }
-    }
-
-    function sortByHouse(studentA, studentB) {
-        if (studentA.house < studentB.house) {
-            return -1;
-        } else {
-            return 1;
-        }
-    }
-
 
 
     displayList(sortedList);
@@ -335,7 +331,7 @@ function showDetails(student) {
     popup.querySelector("[data-field=house]").textContent = "house: " + student.house;
     //add styles to the article according to student house
     addStyles(student.house, detailArticle);
-    popup.querySelector("#crest").src= `crest/${student.house}tempcrest.png`;
+    popup.querySelector("#crest").src = `crest/${student.house}tempcrest.png`;
 
 
     //adds click eventlistener to the close button (this is an anonymous closured function)
@@ -353,7 +349,7 @@ function showDetails(student) {
 function counter(student) {
 
     //calls counter for students
-    displayCount(totalStudents(), hufflepuffStudent(),ravenclawStudent(),gryffindorStudent(),slytherinStudent());
+    displayCount(totalStudents(), hufflepuffStudent(), ravenclawStudent(), gryffindorStudent(), slytherinStudent());
 
     function totalStudents() {
         return student.length;
@@ -367,7 +363,7 @@ function counter(student) {
         console.log(counter);
         return counter;
     }
-    
+
     function ravenclawStudent() {
         let counter = 0;
         for (let i = 0; i < student.length; i++) {
