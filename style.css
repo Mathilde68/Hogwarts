@@ -33,11 +33,6 @@ margin-bottom: 2rem;
     grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
     grid-gap: 28px;
     background-image: url(images/hogwartsletterv3.jpg);
-   
- 
-
-  
-
     padding:2rem;
     border-radius: 10px;
   }
@@ -117,7 +112,8 @@ margin-bottom: 2rem;
     width:40%;
 }
 .col3{
-  width:20%;
+  display: flex;
+  width:100%;
   align-self: center;
 }
 #popup article img {

@@ -191,6 +191,7 @@ function addBlood(bloodTypes) {
     });
 }
 
+//filter
 function selectFilter(event) {
     const filter = event.target.dataset.filter;
     console.log(`user selected: ${filter}`);
@@ -235,6 +236,7 @@ function filterList(filteredList) {
     return filteredList;
 }
 
+//sorting
 function selectSort(event) {
     const sort = event.target.dataset.sort;
     const sortDir = event.target.dataset.sortDirection;
@@ -286,27 +288,24 @@ function sortList(sortedList) {
 
 }
 
-function addStyles(studenthouse, dest) {
-    dest.className = "";
-    dest.classList.add(studenthouse);
-}
 
+//makes sure my filter and sort works together before displaying list
 function buildList() {
     const currentList = filterList(allStudents);
     const sortedList = sortList(currentList);
-
+    
     displayList(sortedList);
 }
 
 
 function displayList(students) {
-
-
+    
+    
     // clear the list
     document.querySelector("#list").innerHTML = "";
     // build a new list
     students.forEach(displayStudent);
-
+    
 }
 
 
@@ -315,13 +314,13 @@ function displayStudent(student) {
     // create clone
     const clone = document.querySelector("template#studentTemplate").content.cloneNode(true);
     const article = clone.querySelector("#student");
-
+    
     // set clone data
-
+    
     //fullname image and house.
     clone.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
     clone.querySelector(".image").src = student.image;
-
+    
     // for students that have no middlename, or lastname,sets correct fullnames 
     if (!student.middlename) {
         clone.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.lastname}`;
@@ -329,21 +328,25 @@ function displayStudent(student) {
     if (!student.lastname) {
         clone.querySelector("[data-field=fullname]").textContent = student.firstname;
     }
-
+    
     clone.querySelector("[data-field=house]").textContent = student.house;
 
     //calls adds style, to article and according to studnet house
     //addStyles(student.house, article);
     //adds click eventlistener that calls the function showDetails for that student
     article.addEventListener("click", () => showDetails(student));
-
-
+    
+    
     // append clone to list
     document.querySelector("#list").appendChild(clone);
-
-
+    
+    
 }
 
+function addStyles(studenthouse, dest) {
+    dest.className = "";
+    dest.classList.add(studenthouse);
+}
 
 function showDetails(student) {
     let popup = document.querySelector("#popup");
@@ -366,6 +369,8 @@ function showDetails(student) {
     // if statements for students that have no middlename,nickname or lastname
     //sets those fields to none display as to not leave empty spaces
     // also sets correct fullnames 
+    checkNames();
+    function checkNames(){
     if (!student.middlename) {
         popup.querySelector("[data-field=middlename]").style.display = "none";
         popup.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.lastname}`;
@@ -377,11 +382,13 @@ function showDetails(student) {
         popup.querySelector("[data-field=lastname]").style.display = "none";
         popup.querySelector("[data-field=fullname]").textContent = student.firstname;
     }
-
+    }
     popup.querySelector(".image").src = student.image;
 
-    popup.querySelector("[data-field=gender]").textContent = "gender: " + student.gender;
-    popup.querySelector("[data-field=house]").textContent = "house: " + student.house;
+    //shows gender hosue and bloood status
+    popup.querySelector("[data-field=gender]").textContent = "Gender: " + student.gender;
+    popup.querySelector("[data-field=house]").textContent = "House: " + student.house;
+    popup.querySelector("[data-field=blood]").textContent = "Blood: " + student.blood;
     //add styles to the article according to student house
     addStyles(student.house, detailArticle);
     popup.querySelector("#crest").src = `crests/${student.house}.png`;
@@ -445,8 +452,6 @@ function counter(student) {
     }
 
 }
-
-
 
 function displayCount(total, huff, raven, gryf, slyth, expelled) {
     document.querySelector(".total").textContent += total;
