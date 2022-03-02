@@ -10,12 +10,20 @@ const Student =
     nickname: "default nick name",
     gender: "default gender",
     house: "default house",
-    bloodStatus: "default blood",
+    blood: "",
     image: "default image"
 }
     ;
 
 const allStudents = [];
+
+
+const settings = {
+    filterBy: "*",
+    sortBy: "firstname",
+    sortDir: "az"
+}
+
 
 
 function start() {
@@ -25,6 +33,7 @@ function start() {
 
     //load my json
     loadJSON();
+
 
 }
 
@@ -42,20 +51,28 @@ function registerButtons() {
 
 
 async function loadJSON() {
+
+    //for student data
     // await response of fetch call
     const response = await fetch('https://petlatkea.dk/2021/hogwarts/students.json');
     // proceeds once fetch is done
     const jsonData = await response.json();
 
+    //for blood data
+    // await response of fetch call
+    const responseB = await fetch('https://petlatkea.dk/2021/hogwarts/families.json');
+    // proceeds once fetch is done
+    const jsonDataB = await responseB.json();
 
     prepareObjects(jsonData);
-
-
+    addBlood(jsonDataB);
 }
 
-function prepareObjects(jsonData) {
-    jsonData.forEach(jsonObject => {
 
+
+function prepareObjects(jsonData, jsonDataB) {
+
+    jsonData.forEach(jsonObject => {
 
         //create new object
         const student = Object.create(Student);
@@ -129,8 +146,6 @@ function prepareObjects(jsonData) {
         }
 
 
-
-
         //put cleaned data into the new object
         student.firstname = firstName;
         student.middlename = middleName;
@@ -144,35 +159,59 @@ function prepareObjects(jsonData) {
 
         //add the object to the global allAnimals array
         allStudents.push(student);
-
-
     });
-
-
 
     displayList(allStudents);
     counter(allStudents);
 
 
+}
 
+
+function addBlood(bloodTypes) {
+    const pureblood = bloodTypes.pure;
+    const halfblood = bloodTypes.half;
+
+    allStudents.forEach((student) => {
+        pureblood.forEach((pure) => {
+            if (student.lastname === pure) {
+                student.blood = "pure";
+            } else
+                halfblood.forEach((half) => {
+                    if (student.lastname === half) {
+                        student.blood = "half";
+                    }
+                });
+        });
+
+        if (!student.blood) {
+            student.blood = "muggle";
+        }
+        console.log(student);
+    });
 }
 
 function selectFilter(event) {
     const filter = event.target.dataset.filter;
     console.log(`user selected: ${filter}`);
-    filterList(filter);
+    setFilter(filter);
 }
 
-function filterList(filterBy) {
-    let filteredList = allStudents;
+function setFilter(filter) {
+    settings.filterBy = filter;
+    buildList();
+}
 
-    if (filterBy === "Hufflepuff") {
+function filterList(filteredList) {
+
+
+    if (settings.filterBy === "Hufflepuff") {
         filteredList = allStudents.filter(isHufflepuff);
-    } else if (filterBy === "Gryffindor") {
+    } else if (settings.filterBy === "Gryffindor") {
         filteredList = allStudents.filter(isGryffindor);
-    } else if (filterBy === "Ravenclaw") {
+    } else if (settings.filterBy === "Ravenclaw") {
         filteredList = allStudents.filter(isRavenclaw);
-    } else if (filterBy === "Slytherin") {
+    } else if (settings.filterBy === "Slytherin") {
         filteredList = allStudents.filter(isSlytherin);
     }
 
@@ -193,7 +232,7 @@ function filterList(filterBy) {
 
     }
 
-    displayList(filteredList);
+    return filteredList;
 }
 
 function selectSort(event) {
@@ -201,22 +240,28 @@ function selectSort(event) {
     const sortDir = event.target.dataset.sortDirection;
 
     //toggle sort direction 
-    if(sortDir === "az"){
-    event.target.dataset.sortDirection = "za";
-    }else{
-    event.target.dataset.sortDirection = "az";
+    if (sortDir === "az") {
+        event.target.dataset.sortDirection = "za";
+    } else {
+        event.target.dataset.sortDirection = "az";
 
     }
 
     console.log(`user selected: ${sort} - ${sortDir}`);
-    sortList(sort, sortDir);
+    setSort(sort, sortDir);
 }
 
-function sortList(sortBy, sortDir) {
-    const list = allStudents;
-    let sortedList;
+function setSort(sortBy, sortDir) {
+    settings.sortBy = sortBy;
+    settings.sortDir = sortDir;
+    buildList();
+
+}
+
+function sortList(sortedList) {
+
     let direction = 1;
-    if (sortDir === "za") {
+    if (settings.sortDir === "za") {
         direction = -1;
     } else {
         direction = 1;
@@ -224,12 +269,12 @@ function sortList(sortBy, sortDir) {
 
 
 
-    sortedList = list.sort(sortByThis);
+    sortedList = sortedList.sort(sortByThis);
 
 
 
     function sortByThis(studentA, studentB) {
-        if (studentA[sortBy] < studentB[sortBy]) {
+        if (studentA[settings.sortBy] < studentB[settings.sortBy]) {
             return -1 * direction;
         } else {
             return 1 * direction;
@@ -237,7 +282,7 @@ function sortList(sortBy, sortDir) {
     }
 
 
-    displayList(sortedList);
+    return sortedList;
 
 }
 
@@ -245,6 +290,14 @@ function addStyles(studenthouse, dest) {
     dest.className = "";
     dest.classList.add(studenthouse);
 }
+
+function buildList() {
+    const currentList = filterList(allStudents);
+    const sortedList = sortList(currentList);
+
+    displayList(sortedList);
+}
+
 
 function displayList(students) {
 
@@ -331,7 +384,7 @@ function showDetails(student) {
     popup.querySelector("[data-field=house]").textContent = "house: " + student.house;
     //add styles to the article according to student house
     addStyles(student.house, detailArticle);
-    popup.querySelector("#crest").src = `crest/${student.house}tempcrest.png`;
+    popup.querySelector("#crest").src = `crests/${student.house}.png`;
 
 
     //adds click eventlistener to the close button (this is an anonymous closured function)
