@@ -36,6 +36,17 @@ margin-bottom: 2rem;
     padding:2rem;
     border-radius: 10px;
   }
+
+  #expelledlist {
+    max-width: 1200px;
+    margin: 10px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
+    grid-gap: 28px;
+    background-color: rgb(95, 86, 78);
+    padding:2rem;
+    border-radius: 10px;
+  }
 #student {
   padding: 1rem;
   cursor: pointer;
@@ -133,4 +144,8 @@ margin-bottom: 2rem;
     font-weight: bolder;
     color: rgb(0, 0, 0);
     cursor: pointer;
+}
+
+.hidden{
+  display: none;
 }

@@ -11,16 +11,19 @@ const Student =
     gender: "default gender",
     house: "default house",
     blood: "",
-    image: "default image"
+    image: "default image",
+    expelled: "false"
 }
     ;
 
 const allStudents = [];
+const expelledStudents = [];
+
 
 
 const settings = {
     filterBy: "*",
-    sortBy: "firstname",
+    sortBy: "",
     sortDir: "az"
 }
 
@@ -37,17 +40,6 @@ function start() {
 
 }
 
-function registerButtons() {
-    document.querySelectorAll("[data-action='filter']")
-        .forEach(button => button.addEventListener("click", selectFilter));
-
-
-    document.querySelectorAll("[data-action='sort']")
-        .forEach(button => button.addEventListener("click", selectSort));
-
-
-
-}
 
 
 async function loadJSON() {
@@ -65,12 +57,12 @@ async function loadJSON() {
     const jsonDataB = await responseB.json();
 
     prepareObjects(jsonData);
-    addBlood(jsonDataB);
+    addBloodStatus(jsonDataB);
 }
 
 
 
-function prepareObjects(jsonData, jsonDataB) {
+function prepareObjects(jsonData) {
 
     jsonData.forEach(jsonObject => {
 
@@ -161,35 +153,42 @@ function prepareObjects(jsonData, jsonDataB) {
         allStudents.push(student);
     });
 
-    displayList(allStudents);
     counter(allStudents);
+    buildList(allStudents);
 
 
 }
 
 
-function addBlood(bloodTypes) {
-    const pureblood = bloodTypes.pure;
-    const halfblood = bloodTypes.half;
+function addBloodStatus(bloodType) {
+    const purebloods = bloodType.pure;
+    const halfbloods = bloodType.half;
+
 
     allStudents.forEach((student) => {
-        pureblood.forEach((pure) => {
-            if (student.lastname === pure) {
-                student.blood = "pure";
-            } else
-                halfblood.forEach((half) => {
-                    if (student.lastname === half) {
-                        student.blood = "half";
-                    }
-                });
-        });
-
-        if (!student.blood) {
+        if (halfbloods.includes(student.lastname)) {
+            student.blood = "halfblood";
+        } else if (purebloods.includes(student.lastname)) {
+            student.blood = "pureblood";
+        } else {
             student.blood = "muggle";
         }
-        console.log(student);
     });
+
+    buildList(allStudents);
 }
+
+function registerButtons() {
+    document.querySelectorAll("[data-action='filter']")
+        .forEach(button => button.addEventListener("click", selectFilter));
+
+
+    document.querySelectorAll("[data-action='sort']")
+        .forEach(button => button.addEventListener("click", selectSort));
+
+
+}
+
 
 //filter
 function selectFilter(event) {
@@ -205,15 +204,15 @@ function setFilter(filter) {
 
 function filterList(filteredList) {
 
-
+    //filteredList = allStudents.filter(isActive);
     if (settings.filterBy === "Hufflepuff") {
-        filteredList = allStudents.filter(isHufflepuff);
+        filteredList = filteredList.filter(isHufflepuff);
     } else if (settings.filterBy === "Gryffindor") {
-        filteredList = allStudents.filter(isGryffindor);
+        filteredList = filteredList.filter(isGryffindor);
     } else if (settings.filterBy === "Ravenclaw") {
-        filteredList = allStudents.filter(isRavenclaw);
+        filteredList = filteredList.filter(isRavenclaw);
     } else if (settings.filterBy === "Slytherin") {
-        filteredList = allStudents.filter(isSlytherin);
+        filteredList = filteredList.filter(isSlytherin);
     }
 
     function isHufflepuff(student) {
@@ -230,6 +229,10 @@ function filterList(filteredList) {
 
     function isSlytherin(student) {
         return student.house === "Slytherin";
+
+    }
+    function isActive(student) {
+        return student.expelled === "false";
 
     }
 
@@ -293,20 +296,32 @@ function sortList(sortedList) {
 function buildList() {
     const currentList = filterList(allStudents);
     const sortedList = sortList(currentList);
-    
-    displayList(sortedList);
+
+    const expelledList = filterList(expelledStudents);
+    const sortedExpelledList = sortList(expelledList);
+
+
+
+    displayList(sortedList, sortedExpelledList);
 }
 
 
-function displayList(students) {
-    
-    
+function displayList(students, expelled) {
+
+
     // clear the list
     document.querySelector("#list").innerHTML = "";
+    document.querySelector("#expelledlist").innerHTML = "";
     // build a new list
     students.forEach(displayStudent);
-    
+    expelled.forEach(displayStudent);
+
 }
+
+
+
+
+
 
 
 
@@ -314,51 +329,92 @@ function displayStudent(student) {
     // create clone
     const clone = document.querySelector("template#studentTemplate").content.cloneNode(true);
     const article = clone.querySelector("#student");
-    
-    // set clone data
-    
-    //fullname image and house.
-    clone.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
-    clone.querySelector(".image").src = student.image;
-    
-    // for students that have no middlename, or lastname,sets correct fullnames 
-    if (!student.middlename) {
-        clone.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.lastname}`;
-    }
-    if (!student.lastname) {
-        clone.querySelector("[data-field=fullname]").textContent = student.firstname;
-    }
-    
-    clone.querySelector("[data-field=house]").textContent = student.house;
 
-    //calls adds style, to article and according to studnet house
-    //addStyles(student.house, article);
-    //adds click eventlistener that calls the function showDetails for that student
-    article.addEventListener("click", () => showDetails(student));
-    
-    
-    // append clone to list
-    document.querySelector("#list").appendChild(clone);
-    
-    
+    if (student.expelled == "true") {
+        expelledData(student);
+    } else {
+        studentData();
+
+    }
+
+    function studentData() {
+        // set clone data
+        //fullname image and house.
+        clone.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
+        clone.querySelector(".image").src = student.image;
+        clone.querySelector("[data-field=blood]").textContent = "studentblood: " + student.blood;
+
+        // for students that have no middlename, or lastname,sets correct fullnames 
+        if (!student.middlename) {
+            clone.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.lastname}`;
+        }
+        if (!student.lastname) {
+            clone.querySelector("[data-field=fullname]").textContent = student.firstname;
+        }
+
+        clone.querySelector("[data-field=house]").textContent = student.house;
+
+
+
+        //appends clone to the list
+        document.querySelector("#list").appendChild(clone);
+    }
+
+    function expelledData(student) {
+
+        // set clone data
+        //fullname image and house.
+        clone.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
+        clone.querySelector(".image").src = student.image;
+        clone.querySelector("[data-field=blood]").textContent = "studentblood: " + student.blood;
+
+        // for students that have no middlename, or lastname,sets correct fullnames 
+        if (!student.middlename) {
+            clone.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.lastname}`;
+        }
+        if (!student.lastname) {
+            clone.querySelector("[data-field=fullname]").textContent = student.firstname;
+        }
+
+        clone.querySelector("[data-field=house]").textContent = student.house;
+
+
+
+        //appends clone to the expelled list
+        document.querySelector("#expelledlist").appendChild(clone);
+
+    }
+
+    studentActions(student);
+
+
+    function studentActions() {
+
+        //adds click eventlistener that calls the function showDetails for that student (the pop up view)
+        article.querySelector(".image").addEventListener("click", () => showDetails(student));
+
+
+    }
+
+
 }
+
+
 
 function addStyles(studenthouse, dest) {
     dest.className = "";
     dest.classList.add(studenthouse);
 }
 
+
+
 function showDetails(student) {
-    let popup = document.querySelector("#popup");
+    const popup = document.querySelector("#popup");
     const detailArticle = popup.querySelector("#studentDetail");
 
 
     resetDisplay();
 
-
-
-    //set display style to block to make visible
-    popup.style.display = "block";
 
     //shows fullname, firstname, lastnames, nicknames and middle names.
     popup.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
@@ -366,45 +422,77 @@ function showDetails(student) {
     popup.querySelector("[data-field=middlename]").textContent = `Middlename: ${student.middlename}`;
     popup.querySelector("[data-field=lastname]").textContent = "lastname: " + student.lastname;
     popup.querySelector("[data-field=nickname]").textContent = "nickname: " + student.nickname;
-    // if statements for students that have no middlename,nickname or lastname
-    //sets those fields to none display as to not leave empty spaces
-    // also sets correct fullnames 
-    checkNames();
-    function checkNames(){
-    if (!student.middlename) {
-        popup.querySelector("[data-field=middlename]").style.display = "none";
-        popup.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.lastname}`;
-    }
-    if (!student.nickname) {
-        popup.querySelector("[data-field=nickname]").style.display = "none";
-    }
-    if (!student.lastname) {
-        popup.querySelector("[data-field=lastname]").style.display = "none";
-        popup.querySelector("[data-field=fullname]").textContent = student.firstname;
-    }
-    }
-    popup.querySelector(".image").src = student.image;
 
-    //shows gender hosue and bloood status
+
+    checkNames();
+    //shows gender hoouse, bloood status, image
     popup.querySelector("[data-field=gender]").textContent = "Gender: " + student.gender;
     popup.querySelector("[data-field=house]").textContent = "House: " + student.house;
     popup.querySelector("[data-field=blood]").textContent = "Blood: " + student.blood;
+    popup.querySelector(".image").src = student.image;
+
+
     //add styles to the article according to student house
     addStyles(student.house, detailArticle);
     popup.querySelector("#crest").src = `crests/${student.house}.png`;
 
 
     //adds click eventlistener to the close button (this is an anonymous closured function)
-    document.querySelector("#luk").addEventListener("click", () => popup.style.display = "none");
+    document.querySelector("#luk").addEventListener("click", closePopup);
+    //adds click eventlistener for expelling student.
+    document.querySelector("[data-action=expell]").addEventListener("click", expellStudent);
 
+
+
+    //expelling a student. creates a new array with the expelled student by slicing from allstudents
+    function expellStudent() {
+        document.querySelector("[data-action=expell]").removeEventListener("click", expellStudent);
+
+        const indexOf = allStudents.indexOf(student);
+        const expelledstudent = allStudents.splice(indexOf, 1)[0];
+        expelledstudent.expelled = "true";
+        expelledStudents.push(expelledstudent);
+        buildList();
+        console.log(expelledStudents);
+        console.log(expelledstudent);
+        console.log(allStudents);
+    }
+
+
+    // if statements for students that have no middlename,nickname or lastname
+    //sets those fields to none display as to not leave empty spaces
+    // also sets correct fullnames 
+    function checkNames() {
+        if (!student.middlename) {
+            popup.querySelector("[data-field=middlename]").style.display = "none";
+            popup.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.lastname}`;
+        }
+        if (!student.nickname) {
+            popup.querySelector("[data-field=nickname]").style.display = "none";
+        }
+        if (!student.lastname) {
+            popup.querySelector("[data-field=lastname]").style.display = "none";
+            popup.querySelector("[data-field=fullname]").textContent = student.firstname;
+        }
+    }
+
+    // reset display optios to show all the fields again
     function resetDisplay() {
+        popup.style.display = "block";
         popup.querySelector("[data-field=middlename]").style.display = "block";
         popup.querySelector("[data-field=lastname]").style.display = "block";
         popup.querySelector("[data-field=nickname]").style.display = "block";
     }
 
-
 }
+
+//closing the popup
+function closePopup() {
+    document.querySelector("#popup").style.display = "none"
+}
+
+
+
 
 function counter(student) {
 
@@ -460,5 +548,4 @@ function displayCount(total, huff, raven, gryf, slyth, expelled) {
     document.querySelector(".gdStudents").textContent += gryf;
     document.querySelector(".srStudents").textContent += slyth;
 }
-
 
