@@ -153,8 +153,8 @@ function prepareObjects(jsonData) {
         allStudents.push(student);
     });
 
-    counter(allStudents);
     buildList(allStudents);
+    counter(allStudents);
 
 
 }
@@ -204,7 +204,7 @@ function setFilter(filter) {
 
 function filterList(filteredList) {
 
-    //filteredList = allStudents.filter(isActive);
+
     if (settings.filterBy === "Hufflepuff") {
         filteredList = filteredList.filter(isHufflepuff);
     } else if (settings.filterBy === "Gryffindor") {
@@ -231,10 +231,7 @@ function filterList(filteredList) {
         return student.house === "Slytherin";
 
     }
-    function isActive(student) {
-        return student.expelled === "false";
-
-    }
+  
 
     return filteredList;
 }
@@ -294,12 +291,12 @@ function sortList(sortedList) {
 
 //makes sure my filter and sort works together before displaying list
 function buildList() {
+
     const currentList = filterList(allStudents);
     const sortedList = sortList(currentList);
 
     const expelledList = filterList(expelledStudents);
     const sortedExpelledList = sortList(expelledList);
-
 
 
     displayList(sortedList, sortedExpelledList);
@@ -330,6 +327,8 @@ function displayStudent(student) {
     const clone = document.querySelector("template#studentTemplate").content.cloneNode(true);
     const article = clone.querySelector("#student");
 
+
+    //decides which list the studnet should be appended to depending on if they are expelled or not
     if (student.expelled == "true") {
         expelledData(student);
     } else {
@@ -453,6 +452,7 @@ function showDetails(student) {
         expelledstudent.expelled = "true";
         expelledStudents.push(expelledstudent);
         buildList();
+        counter();
         console.log(expelledStudents);
         console.log(expelledstudent);
         console.log(allStudents);
@@ -494,19 +494,19 @@ function closePopup() {
 
 
 
-function counter(student) {
+function counter() {
 
-    //calls counter for students
-    displayCount(totalStudents(), hufflepuffStudent(), ravenclawStudent(), gryffindorStudent(), slytherinStudent());
+   
 
-    function totalStudents() {
-        return student.length;
-    }
+    const totalStudents = allStudents.length;
+    const totalExpelled = expelledStudents.length;
+    
 
+   
     function hufflepuffStudent() {
         let counter = 0;
-        for (let i = 0; i < student.length; i++) {
-            if (student[i].house === 'Hufflepuff') counter++;
+        for (let i = 0; i < totalStudents; i++) {
+            if (allStudents[i].house === 'Hufflepuff') counter++;
         }
         console.log(counter);
         return counter;
@@ -514,8 +514,8 @@ function counter(student) {
 
     function ravenclawStudent() {
         let counter = 0;
-        for (let i = 0; i < student.length; i++) {
-            if (student[i].house === 'Ravenclaw') counter++;
+        for (let i = 0; i < totalStudents; i++) {
+            if (allStudents[i].house === 'Ravenclaw') counter++;
         }
         console.log(counter);
         return counter;
@@ -523,8 +523,8 @@ function counter(student) {
 
     function gryffindorStudent() {
         let counter = 0;
-        for (let i = 0; i < student.length; i++) {
-            if (student[i].house === 'Gryffindor') counter++;
+        for (let i = 0; i < totalStudents; i++) {
+            if (allStudents[i].house === 'Gryffindor') counter++;
         }
         console.log(counter);
         return counter;
@@ -532,20 +532,24 @@ function counter(student) {
 
     function slytherinStudent() {
         let counter = 0;
-        for (let i = 0; i < student.length; i++) {
-            if (student[i].house === 'Slytherin') counter++;
+        for (let i = 0; i < totalStudents; i++) {
+            if (allStudents[i].house === 'Slytherin') counter++;
         }
         console.log(counter);
         return counter;
-    }
+    } 
+
+     //calls counter for students
+     displayCount(totalStudents, hufflepuffStudent(), ravenclawStudent(), gryffindorStudent(), slytherinStudent(),totalExpelled);
 
 }
 
 function displayCount(total, huff, raven, gryf, slyth, expelled) {
-    document.querySelector(".total").textContent += total;
-    document.querySelector(".hpStudents").textContent += huff;
-    document.querySelector(".rcStudents").textContent += raven;
-    document.querySelector(".gdStudents").textContent += gryf;
-    document.querySelector(".srStudents").textContent += slyth;
+    document.querySelector(".total").textContent =`Total: ${total}`;
+    document.querySelector(".hpStudents").textContent = `Hufflepuff: ${huff}`;
+    document.querySelector(".rcStudents").textContent = `Ravenclaw: ${raven}`;
+    document.querySelector(".gdStudents").textContent = `Gryffindor ${gryf}`;
+    document.querySelector(".srStudents").textContent = `Slytherin: ${slyth}`;
+    document.querySelector(".expelled").textContent = `Expelled: ${expelled}`;
 }
 
