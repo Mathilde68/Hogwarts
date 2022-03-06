@@ -471,7 +471,7 @@ function showDetails(student) {
         document.querySelector("[data-action=expell]").classList.add("hidden");
         document.querySelector("#awesome").classList.remove("hidden");
     
-     student.expelled="false";
+        student.expelled="false";
         
 
 
@@ -638,7 +638,7 @@ function makeMeAWitch(){
     me.gender = "Girl";
     me.image = "images/me.jpg";
     me.blood = "Muggle";
-    me.expelled = false;
+    me.expelled = "false";
     me.awesome = true;
 
 return me;
