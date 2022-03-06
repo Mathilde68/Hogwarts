@@ -6,94 +6,155 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <main>
+
         <section id="section1">
-        <h1>List of hogwarts students</h1>
+            <h1>Hogwarts Students</h1>
 
-        <div>
-            <h3 class="total">Total students: </h3>
-            <h3 class="gdStudents">Gryffindor students: </h3>
-            <h3 class="rcStudents">Ravenclaw students: </h3>
-            <h3 class="hpStudents">Hufflepuff students:  </h3>
-            <h3 class="srStudents">Slytherin students: </h3>
-            <h3 class="expelled">Expelled students: </h3>
-        </div>
-        
-        <div id="filtering">
-            <p>
-                Filter:
-                <button class="filter" data-action="filter" data-filter="Gryffindor">Gryffindor</button>
-                <button class="filter" data-action="filter" data-filter="Ravenclaw">Ravenclaw</button>
-                <button class="filter" data-action="filter" data-filter="Hufflepuff">Hufflepuff</button>
-                <button class="filter" data-action="filter" data-filter="Slytherin">Slytherin</button>
-                <button class="filter" data-action="filter" data-filter="*">all</button>
-            </p>
-        </div>
+            <div id="studentcount">
+                <div class="top">
+                    <h2 class="total">Total students: </h2>
+                    <h2 class="expelled">Expelled students: </h2>
+                </div>
+                <div id="housecount">
+                    <div id="gryf" class="ahouse">
+                        <img src="crests/gryffindor.png" alt="">
+                        <h3 class="gdStudents"> </h3>
+                    </div>
+                    <div id="raven" class="ahouse">
+                        <img src="crests/ravenclaw.png" alt="">
+                        <h3 class="rcStudents"> </h3>
+                    </div>
+                    <div id="huff" class="ahouse">
+                        <img src="crests/hufflepuff.png" alt="">
+                        <h3 class="hpStudents"></h3>
+                    </div>
+                    <div id="slyth" class="ahouse">
+                        <img src="crests/slytherin.png" alt="">
+                        <h3 class="srStudents"></h3>
+                    </div>
+                </div>
+            </div>
 
-        <div id="sorting">
-            <p>
-                Sort by:
-                <button data-action="sort" data-sort-direction="az" data-sort="firstname">Firstname </button>
-                <button data-action="sort" data-sort-direction="az" data-sort="lastname">Lastname </button>
-                <button data-action="sort" data-sort-direction="za" data-sort="house">House </button>
-                <button data-action="sort" data-sort-direction="az" data-sort="gender">Gender </button>
-      
-            </p>
-        </div>
 
-    </section>
 
-        <section id="list">
+            <section id="sortandfilter">
+
+                <div id="filtering">
+
+                    <h4> Filters:
+                        <button class="filter" data-action="filter" data-filter="*">all</button>
+                        <button class="filter Gryffindor" data-action="filter"
+                            data-filter="Gryffindor">Gryffindor</button>
+                        <button class="filter Ravenclaw" data-action="filter" data-filter="Ravenclaw">Ravenclaw</button>
+                        <button class="filter Hufflepuff" data-action="filter"
+                            data-filter="Hufflepuff">Hufflepuff</button>
+                        <button class="filter Slytherin" data-action="filter" data-filter="Slytherin">Slytherin</button>
+                    </h4>
+                </div>
+
+                <div id="sorting">
+
+                    <h4>Sort by:
+                        <button class="sorting" data-action="sort" data-sort-direction="az"
+                            data-sort="firstname">Firstname
+                        </button>
+                        <button class="sorting" data-action="sort" data-sort-direction="az"
+                            data-sort="lastname">Lastname
+                        </button>
+                        <button class="sorting" data-action="sort" data-sort-direction="za" data-sort="house">House
+                        </button>
+                        <button class="sorting" data-action="sort" data-sort-direction="az" data-sort="gender">Gender
+                        </button>
+
+                    </h4>
+                </div>
+
+
+
+
+            </section>
+        </section>
+            <div id="titleSearch">
+                <h2 class="listname">Admitted Students</h2>
+                <div class="searchBox">
+                    <form id="form">
+                        <input type="search" class="searchInput" name="search">
+                        <svg viewBox="0 0 1024 1024">
+                            <path class="path1"
+                                d="M848.471 928l-263.059-263.059c-48.941 36.706-110.118 55.059-177.412 55.059-171.294 0-312-140.706-312-312s140.706-312 312-312c171.294 0 312 140.706 312 312 0 67.294-24.471 128.471-55.059 177.412l263.059 263.059-79.529 79.529zM189.623 408.078c0 121.364 97.091 218.455 218.455 218.455s218.455-97.091 218.455-218.455c0-121.364-103.159-218.455-218.455-218.455-121.364 0-218.455 97.091-218.455 218.455z">
+                            </path>
+                        </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+       
+        <section class="liste" id="list">
 
         </section>
+        <h2 class="listname">Expelled Students</h2>
+        <section class="liste" id="expelledlist">
 
-        <section id="expelledlist">
 
         </section>
 
 
         <section id="popup">
-            <article id="studentDetail">
+            <article  id="studentDetail">
                 <div id="topflex">
-                <h2 data-field="fullname"></h2>
-                <div id="luk"> &#9587; </div>
-            </div>
-                <div id="bottomflex">
-                <div class="col1">
-                    <img src="" alt="" class="image">
+                    <h2 data-field="fullname"></h2>
+                    <div id="luk"> > </div>
                 </div>
+                <div id="middleflex">
+                    <div class="col1">
+                        <img src="" alt="" class="image">
+                    </div>
 
-                <div class="col2">
-                    <p data-field="firstname"></p>
-                    <p data-field="middlename"></p>
-                    <p data-field="nickname"></p>
-                    <p data-field="lastname"></p>
-                    <p data-field="gender"></p>
-                    <p data-field="house"></p>
-                    <p data-field="blood"></p>
+                    <div class="col2">
+                        <p data-field="firstname"></p>
+                        <p data-field="middlename"></p>
+                        <p data-field="nickname"></p>
+                        <p data-field="lastname"></p>
+                        <p data-field="gender"></p>
+                        <p data-field="house"></p>
+                        <p data-field="blood"></p>
+                    </div>
+
                 </div>
+                <div class="bottom">
+                    <div id="housecrest">
+                        <img src="" alt="" id="crest">
+                    </div>
 
-            </div>
-            <div class="col3">
-                <img src="" alt="" id="crest">
-            <button data-action="expell">EXPELL</button>
-
-            </div>
+                    <div>
+                    <button data-action="expell">EXPELL</button>
+                    <h4 class="hidden" id="mark">EXPELLED</h4>
+                    <h4 class="hidden" id="awesome">😎</h4>
+                </div>
+                </div>
             </article>
         </section>
+
+        
 
     </main>
 
     <template id="studentTemplate">
         <article class="default" id="student">
             <h3 data-field="fullname"></h3>
-            <p data-field="house"></p>
-            <p data-field="blood"></p>
-            <img src="" alt="" class="image">
+            <div id="studentimages">
+                <img src="" alt="" data-field="image">
+                <img src="" alt="" data-field="house">
+            </div>
         </article>
     </template>
     <script src="script.js"></script>

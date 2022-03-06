@@ -1,3 +1,5 @@
+//Katrine and I have been working on this assignment together, why there migth be simmilarities in the code.
+
 "use strict";
 
 window.addEventListener("DOMContentLoaded", start);
@@ -12,7 +14,8 @@ const Student =
     house: "default house",
     blood: "",
     image: "default image",
-    expelled: "false"
+    expelled: "false",
+    awesome: false
 }
     ;
 
@@ -24,7 +27,9 @@ const expelledStudents = [];
 const settings = {
     filterBy: "*",
     sortBy: "",
-    sortDir: "az"
+    sortDir: "az",
+    search: "",
+    hacked: false
 }
 
 
@@ -77,8 +82,8 @@ function prepareObjects(jsonData) {
         // declaring variables for name parts, plus defining the firstname and capitalising.
         let firstName = originalname[0].charAt(0).toUpperCase() + originalname[0].substring(1).toLowerCase();
         let fullName;
-        let middleName;
-        let lastName;
+        let middleName = "";
+        let lastName = "";
         let nickName;
 
 
@@ -96,7 +101,7 @@ function prepareObjects(jsonData) {
 
             //for names with nicknames instead of middlenames
             if (middleName.includes('"')) {
-                middleName = undefined;
+                middleName = "";
                 nickName = originalname[1];
                 let firstQuotationmark = nickName.indexOf('"');
                 let lastQuotationmark = nickName.lastIndexOf('"');
@@ -186,6 +191,10 @@ function registerButtons() {
     document.querySelectorAll("[data-action='sort']")
         .forEach(button => button.addEventListener("click", selectSort));
 
+    //Here I add eventlistener for my searchbar button
+    document.querySelector(".searchInput").addEventListener("input", searchInput);
+
+   
 
 }
 
@@ -231,7 +240,7 @@ function filterList(filteredList) {
         return student.house === "Slytherin";
 
     }
-  
+
 
     return filteredList;
 }
@@ -288,21 +297,60 @@ function sortList(sortedList) {
 
 }
 
+//set setting.search to vlaue from input
+function searchInput(evt) {
+    settings.search = evt.target.value;
 
-//makes sure my filter and sort works together before displaying list
-function buildList() {
-
-    const currentList = filterList(allStudents);
-    const sortedList = sortList(currentList);
-
-    const expelledList = filterList(expelledStudents);
-    const sortedExpelledList = sortList(expelledList);
-
-
-    displayList(sortedList, sortedExpelledList);
+    //HACKING the trick to enabling hack the system, type hack in searchbar
+    if(settings.search.includes("hack")){
+        document.querySelector(".searchInput").value = "";
+        settings.search="";
+        hackTheSystem();
+    }
+    buildList();
+    
 }
 
 
+//here is my search function
+function searchList(studentList) {
+    let searchInput = settings.search.toUpperCase();
+    console.log(settings.search);
+
+ 
+    return studentList.filter((student) => {
+        // write to the list with only those students in the array that has properties containing the search frase
+        // comparing in uppercase so that m is the same as M
+        // checking both firstnames, middle names and lastnames
+        return (student.firstname.toUpperCase().includes(searchInput) || student.middlename.toUpperCase().includes(searchInput) || student.lastname.toUpperCase().includes(searchInput))
+    });
+}
+
+//makes sure my filter and sort and search works together before displaying list, does the same for the expelled list
+function buildList() {
+
+ 
+    const currentList = filterList(allStudents);
+    const sortedList = sortList(currentList);
+    const searchedList = searchList(sortedList);
+
+    const expelledList = filterList(expelledStudents);
+    const sortedExpelledList = sortList(expelledList);
+    const searchedExpelledList = searchList(sortedExpelledList);
+//EKSTRA HACK FUNCTIONALITY makes sure that search doesnt work if system is hacked
+/* if(settings.hacked){
+    displayList(sortedList, sortedExpelledList);
+
+}else */
+    displayList(searchedList, searchedExpelledList);
+
+}
+
+
+
+
+
+//display list for both admitted and expelled students
 function displayList(students, expelled) {
 
 
@@ -320,8 +368,6 @@ function displayList(students, expelled) {
 
 
 
-
-
 function displayStudent(student) {
     // create clone
     const clone = document.querySelector("template#studentTemplate").content.cloneNode(true);
@@ -329,80 +375,48 @@ function displayStudent(student) {
 
 
     //decides which list the studnet should be appended to depending on if they are expelled or not
-    if (student.expelled == "true") {
-        expelledData(student);
-    } else {
-        studentData();
 
+
+
+    // set clone data
+    //fullname image and house.
+    clone.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
+    clone.querySelector("[data-field=image]").src = student.image;
+    // for students that have no middlename, or lastname,sets correct fullnames 
+    if (student.middlename == "") {
+        clone.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.lastname}`;
+    }
+    if (student.lastname == "") {
+        clone.querySelector("[data-field=fullname]").textContent = student.firstname;
     }
 
-    function studentData() {
-        // set clone data
-        //fullname image and house.
-        clone.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
-        clone.querySelector(".image").src = student.image;
-        clone.querySelector("[data-field=blood]").textContent = "studentblood: " + student.blood;
+    //addStyles(student.house,article);
+    clone.querySelector("[data-field=house]").src = `crests/${student.house}.png`;
 
-        // for students that have no middlename, or lastname,sets correct fullnames 
-        if (!student.middlename) {
-            clone.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.lastname}`;
-        }
-        if (!student.lastname) {
-            clone.querySelector("[data-field=fullname]").textContent = student.firstname;
-        }
-
-        clone.querySelector("[data-field=house]").textContent = student.house;
-
-
-
-        //appends clone to the list
+    if (student.expelled == "true") {
+        document.querySelector("#expelledlist").appendChild(clone);
+        addStyles("expelled-student", article);
+    } else {
         document.querySelector("#list").appendChild(clone);
     }
 
-    function expelledData(student) {
-
-        // set clone data
-        //fullname image and house.
-        clone.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.middlename} ${student.lastname}`;
-        clone.querySelector(".image").src = student.image;
-        clone.querySelector("[data-field=blood]").textContent = "studentblood: " + student.blood;
-
-        // for students that have no middlename, or lastname,sets correct fullnames 
-        if (!student.middlename) {
-            clone.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.lastname}`;
-        }
-        if (!student.lastname) {
-            clone.querySelector("[data-field=fullname]").textContent = student.firstname;
-        }
-
-        clone.querySelector("[data-field=house]").textContent = student.house;
 
 
-
-        //appends clone to the expelled list
-        document.querySelector("#expelledlist").appendChild(clone);
-
-    }
-
-    studentActions(student);
-
-
-    function studentActions() {
 
         //adds click eventlistener that calls the function showDetails for that student (the pop up view)
-        article.querySelector(".image").addEventListener("click", () => showDetails(student));
+        article.addEventListener("click", () => showDetails(student));
 
 
-    }
+    
 
 
 }
 
 
 
-function addStyles(studenthouse, dest) {
+function addStyles(addStyle, dest) {
     dest.className = "";
-    dest.classList.add(studenthouse);
+    dest.classList.add(addStyle);
 }
 
 
@@ -439,23 +453,48 @@ function showDetails(student) {
     //adds click eventlistener to the close button (this is an anonymous closured function)
     document.querySelector("#luk").addEventListener("click", closePopup);
     //adds click eventlistener for expelling student.
+    
     document.querySelector("[data-action=expell]").addEventListener("click", expellStudent);
 
-
+   
 
     //expelling a student. creates a new array with the expelled student by slicing from allstudents
     function expellStudent() {
+       
+        
         document.querySelector("[data-action=expell]").removeEventListener("click", expellStudent);
 
+        //makes sure i cannot be expelled (cuz im awesome)
+        if(student.awesome){
+            alert("⛔️ STUDENT IS AWESOME! CANNOT EXPELL ⛔️")
+            //hides expell button after click
+        document.querySelector("[data-action=expell]").classList.add("hidden");
+        document.querySelector("#awesome").classList.remove("hidden");
+    
+     student.expelled="false";
+        
+
+
+        }else if(!student.awesome){
+      
+        //push the student to the expelled array using splice and indexof, also sets expelled to true.
         const indexOf = allStudents.indexOf(student);
         const expelledstudent = allStudents.splice(indexOf, 1)[0];
         expelledstudent.expelled = "true";
         expelledStudents.push(expelledstudent);
+        
+        //removes the expell button, and replaces with expell mark
+        document.querySelector("[data-action=expell]").classList.add("hidden");
+        document.querySelector("#mark").classList.remove("hidden");
+        
+        
+        
+        
+        
+
         buildList();
         counter();
-        console.log(expelledStudents);
-        console.log(expelledstudent);
-        console.log(allStudents);
+    }
     }
 
 
@@ -464,14 +503,14 @@ function showDetails(student) {
     // also sets correct fullnames 
     function checkNames() {
         if (!student.middlename) {
-            popup.querySelector("[data-field=middlename]").style.display = "none";
+            popup.querySelector("[data-field=middlename]").classList.add("hidden");
             popup.querySelector("[data-field=fullname]").textContent = `${student.firstname} ${student.lastname}`;
         }
         if (!student.nickname) {
-            popup.querySelector("[data-field=nickname]").style.display = "none";
+            popup.querySelector("[data-field=nickname]").classList.add("hidden");
         }
         if (!student.lastname) {
-            popup.querySelector("[data-field=lastname]").style.display = "none";
+            popup.querySelector("[data-field=lastname]").classList.add("hidden");
             popup.querySelector("[data-field=fullname]").textContent = student.firstname;
         }
     }
@@ -479,9 +518,21 @@ function showDetails(student) {
     // reset display optios to show all the fields again
     function resetDisplay() {
         popup.style.display = "block";
-        popup.querySelector("[data-field=middlename]").style.display = "block";
-        popup.querySelector("[data-field=lastname]").style.display = "block";
-        popup.querySelector("[data-field=nickname]").style.display = "block";
+        popup.querySelector("[data-field=middlename]").classList.remove("hidden");
+        popup.querySelector("[data-field=lastname]").classList.remove("hidden");
+        popup.querySelector("[data-field=nickname]").classList.remove("hidden");
+        document.querySelector("#awesome").classList.add("hidden");
+
+        //hides button, shows expellmark when student is expelled otherwise makes sure the expell button is visible when not expelled
+        if(student.expelled == "true"){
+            document.querySelector("[data-action=expell]").classList.add("hidden");
+        }else{ document.querySelector("[data-action=expell]").classList.remove("hidden");
+        document.querySelector("#mark").classList.add("hidden");
+      
+
+    }
+
+       
     }
 
 }
@@ -496,19 +547,19 @@ function closePopup() {
 
 function counter() {
 
-   
+
 
     const totalStudents = allStudents.length;
     const totalExpelled = expelledStudents.length;
-    
 
-   
+
+
     function hufflepuffStudent() {
         let counter = 0;
         for (let i = 0; i < totalStudents; i++) {
             if (allStudents[i].house === 'Hufflepuff') counter++;
         }
-        console.log(counter);
+      
         return counter;
     }
 
@@ -517,7 +568,7 @@ function counter() {
         for (let i = 0; i < totalStudents; i++) {
             if (allStudents[i].house === 'Ravenclaw') counter++;
         }
-        console.log(counter);
+       
         return counter;
     }
 
@@ -526,7 +577,7 @@ function counter() {
         for (let i = 0; i < totalStudents; i++) {
             if (allStudents[i].house === 'Gryffindor') counter++;
         }
-        console.log(counter);
+    
         return counter;
     }
 
@@ -535,21 +586,63 @@ function counter() {
         for (let i = 0; i < totalStudents; i++) {
             if (allStudents[i].house === 'Slytherin') counter++;
         }
-        console.log(counter);
+   
         return counter;
-    } 
+    }
 
-     //calls counter for students
-     displayCount(totalStudents, hufflepuffStudent(), ravenclawStudent(), gryffindorStudent(), slytherinStudent(),totalExpelled);
+    //calls counter for students
+    displayCount(totalStudents, hufflepuffStudent(), ravenclawStudent(), gryffindorStudent(), slytherinStudent(), totalExpelled);
 
 }
 
 function displayCount(total, huff, raven, gryf, slyth, expelled) {
-    document.querySelector(".total").textContent =`Total: ${total}`;
+    document.querySelector(".total").textContent = `Total admitted: ${total}`;
     document.querySelector(".hpStudents").textContent = `Hufflepuff: ${huff}`;
     document.querySelector(".rcStudents").textContent = `Ravenclaw: ${raven}`;
-    document.querySelector(".gdStudents").textContent = `Gryffindor ${gryf}`;
+    document.querySelector(".gdStudents").textContent = `Gryffindor: ${gryf}`;
     document.querySelector(".srStudents").textContent = `Slytherin: ${slyth}`;
     document.querySelector(".expelled").textContent = `Expelled: ${expelled}`;
 }
 
+function hackTheSystem(){
+
+    if(settings.hacked){
+        console.log("ThE SYsTEM iS AlrEady HaCkeD");
+    }else{
+        //sets settings.hacked to true
+        settings.hacked = true;
+        console.log(settings.hacked);
+        //alerts the user taht the sytem is hacked
+        alert("ThE SYsTeM is HAcKd!!!");
+
+        //pushes the object with my info to the student array
+        const me = makeMeAWitch();
+        allStudents.push(me);
+        buildList();
+
+       
+
+    }
+
+
+ 
+
+}
+//create a student object with my info
+function makeMeAWitch(){
+    const me = Object.create(allStudents);
+    me.firstname = "Mathilde";
+    me.lastname = "Laursen";
+    me.middlename = "Emilie";
+    me.house  = "Hufflepuff";
+    me.gender = "Girl";
+    me.image = "images/me.jpg";
+    me.blood = "Muggle";
+    me.expelled = false;
+    me.awesome = true;
+
+return me;
+
+}
+
+console.log(settings.hacked);

@@ -1,95 +1,298 @@
+/* general */
+
 body {
   margin: 0;
- background-color: rgb(2, 6, 31);
+  background-image: url(images/pinestars.jpg);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-color: rgb(5, 5, 15);
+  box-sizing: border-box;
+ 
 }
 img {
   width: 100%;
-  
 }
-main{
-    max-width: 1200px;
-    margin:0 auto;
+main {
+  max-width: 1200px;
+  margin: 0 auto;
 }
+
+/*font stuff*/
+@font-face {
+  font-family: "magic_school_tworegular";
+  src: url("fonts/") format("woff2"), url("fonts/magicschooltwo-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "magic_school_oneregular";
+  src: url("fonts/magicschoolone-webfont.woff2") format("woff2"), url("fonts/magicschoolone-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/*fontsstyling*/
 
 h1 {
-    color: rgb(243, 210, 168);
-  
-}
-#section1,
-#sorting p,
-#filtering p {
-    color: rgb(243, 210, 168);
-  
-}
-#section1{
-margin-top:10rem;
-margin-bottom: 2rem;
-}
-/*list and student article styling*/
-#list {
-    max-width: 1200px;
-    margin: 10px auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
-    grid-gap: 28px;
-    background-image: url(images/hogwartsletterv3.jpg);
-    padding:2rem;
-    border-radius: 10px;
-  }
+  color: rgb(250, 197, 83);
+  font-family: "magic_school_tworegular";
+  font-size: 6rem;
+  font-weight: 100;
+  letter-spacing: 5px;
+  text-align: center;
+  margin-bottom: 1rem;
 
-  #expelledlist {
-    max-width: 1200px;
-    margin: 10px auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
-    grid-gap: 28px;
-    background-color: rgb(95, 86, 78);
-    padding:2rem;
-    border-radius: 10px;
-  }
+
+}
+h2 {
+  font-family: "IM Fell English SC", serif;
+  font-weight: 400;
+
+  font-size: 2.1rem;
+}
+
+h3 {
+  font-family: "IM Fell English SC", serif;
+  font-weight: 400;
+
+  font-size: 1.4rem;
+}
+
+h4 {
+  font-family: "IM Fell English SC", serif;
+  font-weight: 400;
+  color: rgb(243, 210, 168);
+
+  font-size: 1.2rem;
+}
+
+p {
+  font-family: "IM Fell English SC", serif;
+}
+
+/*button styling*/
+
+button:hover {
+  color: rgb(255, 246, 225);
+  border: 8px double rgb(255, 246, 225);
+  box-shadow: 1px 0px 11px 1px rgba(238, 221, 167, 0.63);
+}
+
+button:focus {
+  color: rgb(255, 246, 225);
+  box-shadow: 1px 0px 15px 2px rgba(255, 246, 225, 0.801);
+  border: 8px double rgb(255, 246, 225);
+}
+
+button:active {
+  color: rgb(255, 246, 225);
+  box-shadow: 1px 0px 15px 2px rgba(255, 246, 225, 0.801);
+  border: 8px double rgb(255, 246, 225);
+}
+
+button {
+  padding: 8px 0px;
+  width: 140px;
+  border-radius: 10px;
+  font-family: "IM Fell English SC", serif;
+  font-size: 1.1rem;
+  text-align: center;
+
+  background-color: rgb(49, 49, 54);
+  border: 8px double rgb(250, 207, 114);
+  color: rgb(250, 207, 114);
+}
+
+
+
+/*1st section*/
+#section1 {
+  max-width: 1000px;
+  margin: 1rem auto;
+  color: rgb(243, 210, 168);
+
+}
+
+#studentcount {
+  max-width: 1000px;
+  margin: 0 auto;
+  background-color: rgba(53, 50, 65, 0.521);
+  border-radius: 15px;
+}
+#housecount {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(100px, 1fr));
+  margin: 0px 40px ;
+ 
+  justify-items: center;
+  align-items: end;
+  text-align: center;
+  padding:20px 10px;
+}
+.ahouse {
+  max-width: 180px;
+}
+
+#studentcount .top {
+  display: flex;
+  justify-content: space-evenly;
+
+}
+.top h2{
+  font-size: 1.8rem;
+}
+
+
+#filtering h4{
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  grid-gap: 20px;
+  text-transform: uppercase;
+
+}
+#filtering{
+  margin: 40px 50px;
+}
+#sorting h4{
+  margin: 40px 50px;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  grid-gap: 20px;
+  text-transform: uppercase;
+}
+
+/*list and student article styling*/
+#titleSearch{
+  display: flex;
+    align-items: flex-end;
+  
+    justify-content: space-between;
+}
+/*search*/
+svg {
+  cursor: pointer;
+  color: rgb(250, 197, 83);
+  fill: rgb(250, 197, 83);
+  width: 24px;
+  height: 24px;
+  padding: 10px;
+}
+
+input {
+  all: unset;
+  color: rgb(250, 197, 83);;
+  height: 100%;
+  width: 100%;
+  padding: 6px 10px;
+  font-family: "IM Fell English SC", serif;
+}
+
+.searchBox {
+  display: flex;
+  justify-content: center;
+}
+
+form {
+  background-color: rgb(72, 72, 85);
+  width: 300px;
+  height: 44px;
+  margin-top: 20px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  color:rgb(250, 197, 83);
+}
+
+.searchInput::-webkit-search-cancel-button{
+  -webkit-appearance:none;
+}
+.listname {
+  margin-top: 6rem;
+  margin-bottom: 0;
+  color: rgb(250, 197, 83);
+}
+.liste {
+  max-width: 1100x;
+  margin: 0px auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(225px, 1fr));
+  grid-gap: 20px;
+
+  padding: 2rem;
+  border-radius: 10px;
+}
+
+#expelledlist {
+  background-color: rgba(70, 47, 47, 0.849);
+  margin-bottom: 3rem;
+}
+
 #student {
+  color: rgb(250, 207, 114);
   padding: 1rem;
   cursor: pointer;
+  border-radius: 5px;
 }
 
-#student:hover{
-    background-color: rgba(233, 209, 173, 0.377);
+#student:hover {
+  background-color: rgb(58, 61, 63);
 }
 
-#student img{
-    margin:0 auto;
-    max-width: 130px;
+#studentimages img {
+  max-width: 120px;
+  border-radius: 25px;
+}
+
+#studentimages img:nth-child(2) {
+  width: 90px;
+}
+
+#studentimages {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
 /*default and houses classes for the student articles*/
-.default{
-  /*  background-color: rgba(243, 233, 214, 0.568); */
-    border-bottom:4px dotted rgb(80, 43, 30);
-    padding:15px
+.default {
+  border: 4px dotted rgb(250, 207, 114);
+  background-color: rgb(40, 40, 44);
+  padding: 15px;
+}
 
+.expelled-student {
+  border: 4px dotted rgb(105, 2, 2);
+  background-color: rgb(40, 40, 44);
 }
 .Gryffindor {
+  color: rgb(233, 230, 205);
   background-color: rgb(175, 55, 55);
-  border: 5px solid rgb(214, 157, 34);
+  border: 8px double rgb(214, 157, 34);
 }
 
 .Ravenclaw {
+  color: rgb(205, 224, 233);
   background-color: rgb(46, 61, 129);
-  border: 5px solid rgb(166, 186, 204);
+  border: 8px double rgb(166, 186, 204);
 }
 
 .Hufflepuff {
-  background-color: rgb(231, 202, 72);
-  border: 5px solid rgb(36, 36, 36);
+  color: rgb(19, 17, 27);
+  background-color: rgb(240, 190, 52);
+  border: 8px double rgb(41, 40, 46);
 }
 .Slytherin {
-  background-color: rgb(33, 110, 65);
-  border: 5px solid rgb(163, 187, 201);
+  color: rgb(205, 220, 233);
+  background-color: rgb(28, 102, 77);
+  border: 8px double rgb(163, 187, 201);
 }
 
-
-
 /*popup styling*/
+
 #popup {
   overflow-y: scroll;
   display: none;
@@ -102,50 +305,97 @@ margin-bottom: 2rem;
 }
 
 #popup article {
-    
-    width: 35vw;
-    margin: 15rem auto;
-    padding: 1.5vw;
-    border-radius: 10px;
-  
+  width: 30vw;
+  margin: 12rem auto;
+  padding: 1.5vw;
+  border-radius: 10px;
 }
 
-#bottomflex{
+#middleflex {
   padding: 10px;
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
-  justify-content: space-evenly;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
-
-}
-.col1{
-    width:40%;
-}
-.col3{
-  display: flex;
-  width:100%;
-  align-self: center;
-}
-#popup article img {
-    width: 80%;
-    max-width: 30vw;
   }
 
-  #topflex{
+  #middleflex img{
+    border-radius: 25px;
+  }
+
+.col1 {
+  width: 40%;
+}
+
+#popup article img {
+  width: 80%;
+  max-width: 20vw;
+}
+.col2{
+  padding-right: 20%;
+}
+.bottom {
+  padding: 0px 20px;
+  display: flex;
+  align-self: center;
+  align-items: flex-end;
+  justify-content: space-between;
+ 
+}
+
+
+
+#housecrest{
+  width:150px;
+}
+
+
+
+#mark{
+  margin-right: -20px;
+  color:rgba(100, 2, 2, 0.76);
+  font-weight: 800;
+  font-size: 1.2rem;
+ transform: rotate(-30deg);
+ border-top: 4px dashed rgba(100, 2, 2, 0.76);
+ border-bottom: 4px dashed rgba(100, 2, 2, 0.76);
+}
+
+#awesome{
+  margin-right: -20px;
+  margin-bottom: 0px;
+  font-size: 2.5rem;
+ transform: rotate(-30deg);
+ 
+}
+
+#topflex {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-  }
-
-#luk {
-    align-self: flex-start;
-    font-size: 1.2em;
-    font-weight: bolder;
-    color: rgb(0, 0, 0);
-    cursor: pointer;
+    height: 63px;
 }
 
-.hidden{
+#luk {
+  align-self: flex-start;
+  font-size: 1.5em;
+  font-weight: bolder;
+  color: rgba(26, 27, 26, 0.842);
+  cursor: pointer;
+  font-family:"magic_school_tworegular" ;
+}
+
+#luk:hover {
+  color: rgba(255, 252, 246, 0.623);
+ 
+}
+
+.hidden {
   display: none;
+}
+
+.hacked{
+  writing-mode: vertical-rl;
+text-orientation: upright;
 }
